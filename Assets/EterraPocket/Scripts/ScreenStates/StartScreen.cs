@@ -12,16 +12,16 @@ namespace Assets.Scripts.ScreenStates
     private Button _btnEnter;
 
     public StartScreen(GameController _flowController)
-        : base(_flowController)
+     : base(_flowController)
     {
-
+      Debug.Log("StartScreen constructor called.");
     }
 
     public override void EnterState()
     {
       Debug.Log($"[{this.GetType().Name}] EnterState");
 
-      var visualTreeAsset = Resources.Load<VisualTreeAsset>($"DemoGame/UI/Screens/StartScreenUI");
+      var visualTreeAsset = Resources.Load<VisualTreeAsset>($"EterraPocket/UI/Screens/StartScreenUI");
       var instance = visualTreeAsset.Instantiate();
       instance.style.width = new Length(100, LengthUnit.Percent);
       instance.style.height = new Length(98, LengthUnit.Percent);

@@ -51,13 +51,13 @@ namespace Assets.Scripts
       var root = GetComponent<UIDocument>().rootVisualElement;
       VelContainer = root.Q<VisualElement>("VelContainer");
 
-      VelContainer.RemoveAt(1);
+      // VelContainer.RemoveAt(1);
 
-      if (VelContainer.childCount > 1)
-      {
-        Debug.Log("Plaese remove development work, before starting!");
-        return;
-      }
+      // if (VelContainer.childCount > 1)
+      // {
+      //   Debug.Log("Plaese remove development work, before starting!");
+      //   return;
+      // }
 
       // call insital flow state
       ChangeScreenState(GameScreen.StartScreen);
