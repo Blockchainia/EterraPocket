@@ -1,0 +1,4 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:Label text="EterraPocket" style="-unity-text-align: upper-center; color: rgb(200, 0, 0); -unity-font-style: bold; font-size: 28px; justify-content: flex-start; align-content: flex-start; top: 10%;" />
+    <ui:Button text="Enter" style="-unity-font-style: bold; font-size: 22px; -unity-text-align: middle-center; top: 30%; width: 50%; align-self: center;" />
+</ui:UXML>
