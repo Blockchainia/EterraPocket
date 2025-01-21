@@ -24,7 +24,7 @@ namespace Assets.Scripts.ScreenStates
       var topFiller = FlowController.VelContainer.Q<VisualElement>("VelTopFiller");
       //topFiller.style.backgroundColor = GameConstant.ColorDark;
 
-      var visualTreeAsset = Resources.Load<VisualTreeAsset>($"DemoGame/UI/Screens/MainScreenUI");
+      var visualTreeAsset = Resources.Load<VisualTreeAsset>($"UI/Screens/MainScreenUI");
       var instance = visualTreeAsset.Instantiate();
       instance.style.width = new Length(100, LengthUnit.Percent);
       instance.style.height = new Length(98, LengthUnit.Percent);

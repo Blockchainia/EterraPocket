@@ -49,17 +49,24 @@ namespace Assets.Scripts
     private void Start()
     {
       var root = GetComponent<UIDocument>().rootVisualElement;
+
+      if (root == null)
+      {
+        Debug.LogError("UIDocument root is null. Ensure the UI Document is assigned correctly.");
+        return;
+      }
       VelContainer = root.Q<VisualElement>("VelContainer");
 
-      // VelContainer.RemoveAt(1);
+      VelContainer.RemoveAt(1);
 
-      // if (VelContainer.childCount > 1)
-      // {
-      //   Debug.Log("Plaese remove development work, before starting!");
-      //   return;
-      // }
 
-      // call insital flow state
+
+      if (VelContainer == null)
+      {
+        Debug.LogError("VelContainer not found in UI Document. Ensure it exists in the UXML.");
+        return;
+      }
+
       ChangeScreenState(GameScreen.StartScreen);
     }
 

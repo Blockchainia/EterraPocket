@@ -21,17 +21,39 @@ namespace Assets.Scripts.ScreenStates
     {
       Debug.Log($"[{this.GetType().Name}] EnterState");
 
-      var visualTreeAsset = Resources.Load<VisualTreeAsset>($"EterraPocket/UI/Screens/StartScreenUI");
+      var visualTreeAsset = Resources.Load<VisualTreeAsset>($"UI/Screens/StartScreenUI");
+
+      if (visualTreeAsset == null)
+      {
+        Debug.LogError("Failed to load StartScreenUI. Ensure the path is correct and the UXML file is in the Resources folder.");
+        return;
+      }
+
       var instance = visualTreeAsset.Instantiate();
+      if (instance == null)
+      {
+        Debug.LogError("Failed to instantiate StartScreenUI.");
+        return;
+      }
+
       instance.style.width = new Length(100, LengthUnit.Percent);
       instance.style.height = new Length(98, LengthUnit.Percent);
 
       _btnEnter = instance.Q<Button>("BtnEnter");
+      if (_btnEnter == null)
+      {
+        Debug.LogError("BtnEnter not found in StartScreenUI.");
+        return;
+      }
+
       _btnEnter.RegisterCallback<ClickEvent>(OnEnterClicked);
 
-      // Grid.OnSwipeEvent += OnSwipeEvent;
+      if (FlowController.VelContainer == null)
+      {
+        Debug.LogError("FlowController.VelContainer is null.");
+        return;
+      }
 
-      // add container
       FlowController.VelContainer.Add(instance);
     }
 
