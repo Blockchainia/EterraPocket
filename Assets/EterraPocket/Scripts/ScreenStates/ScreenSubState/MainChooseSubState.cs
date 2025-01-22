@@ -26,12 +26,12 @@ namespace Assets.Scripts.ScreenStates
       var floatBody = FlowController.VelContainer.Q<VisualElement>("FloatBody");
       floatBody.Clear();
 
-      TemplateContainer scrollViewElement = ElementInstance("DemoGame/UI/Elements/ScrollViewElement");
+      TemplateContainer scrollViewElement = ElementInstance("UI/Elements/ScrollViewElement");
       floatBody.Add(scrollViewElement);
 
       var scrollView = scrollViewElement.Q<ScrollView>("ScvElement");
 
-      TemplateContainer elementInstance = ElementInstance("DemoGame/UI/Frames/ChooseFrame");
+      TemplateContainer elementInstance = ElementInstance("UI/Frames/ChooseFrame");
 
       _btnPlay = elementInstance.Q<Button>("BtnPlay");
       _btnPlay.SetEnabled(false);

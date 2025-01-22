@@ -1,5 +1,11 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
-    <ui:VisualElement name="TopBound" style="flex-grow: 1;">
-        <ui:Button text="Faucet" name="BtnFaucet" />
+    <ui:VisualElement name="Screen" style="flex-grow: 1;">
+        <ui:VisualElement name="TopBound" style="flex-grow: 1; height: 10%; flex-direction: row;">
+            <ui:Button text="Faucet" name="BtnFaucet" />
+            <ui:VisualElement style="flex-grow: 1;" />
+            <ui:VisualElement style="flex-grow: 1;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="FloatBody" style="flex-grow: 1; height: 80%;" />
+        <ui:VisualElement name="BottomBound" style="flex-grow: 1; height: 10%;" />
     </ui:VisualElement>
 </ui:UXML>
