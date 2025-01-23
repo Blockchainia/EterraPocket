@@ -34,7 +34,7 @@ namespace Assets.Scripts.ScreenStates
       FlowController.VelContainer.Add(instance);
 
       // load initial sub state
-      FlowController.ChangeScreenSubState(GameScreen.PlayScreen, GameSubScreen.PlaySelect);
+      FlowController.ChangeScreenSubState(GameScreen.PlayScreen, GameSubScreen.PlayInit);
 
       // initial update
     }

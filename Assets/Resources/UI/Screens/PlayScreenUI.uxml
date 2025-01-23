@@ -54,11 +54,14 @@
                     </ui:VisualElement>
                 </ui:VisualElement>
                 <ui:VisualElement name="StatusHolder" style="flex-grow: 1; width: 15%;">
-                    <ui:VisualElement name="OpponentStatus" style="flex-grow: 1;">
+                    <ui:VisualElement name="OpponentStatus" style="flex-grow: 1; height: 40%;">
                         <ui:VisualElement name="OpponentArrow" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/EterraPocket/Images/red_arrow.png?fileID=2800000&amp;guid=f45dd268b15c14cb2a776236e747824e&amp;type=3#red_arrow&quot;); height: 40%; visibility: visible; display: flex;" />
                     </ui:VisualElement>
-                    <ui:Label text="TURN" name="StatusLabel" style="height: 10%; white-space: normal; font-size: 13px; -unity-font-style: bold; -unity-font-definition: url(&quot;project://database/Assets/EterraPocket/Fonts/matrix-ii-bold%203.otf?fileID=12800000&amp;guid=b35446d6656694b839a274fd7e241459&amp;type=3#matrix-ii-bold 3&quot;); -unity-text-align: middle-center; border-top-width: 2px; border-right-width: 2px; border-bottom-width: 2px; border-left-width: 2px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); background-color: rgba(255, 255, 255, 0.46);" />
-                    <ui:VisualElement name="PlayerStatus" style="flex-grow: 1;">
+                    <ui:VisualElement name="StatusDisplayHolder" style="flex-grow: 1; height: 20%; justify-content: center; position: relative;">
+                        <ui:Label text="TURN" name="StatusLabel" style="height: auto; white-space: normal; font-size: 13px; -unity-font-style: bold; -unity-font-definition: url(&quot;project://database/Assets/EterraPocket/Fonts/matrix-ii-bold%203.otf?fileID=12800000&amp;guid=b35446d6656694b839a274fd7e241459&amp;type=3#matrix-ii-bold 3&quot;); -unity-text-align: middle-center; border-top-width: 0; border-right-width: 2px; border-bottom-width: 0; border-left-width: 2px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); background-color: rgba(255, 255, 255, 0.46); position: absolute; align-self: center; justify-content: flex-start; align-items: center; align-content: center; flex-direction: column;" />
+                        <ui:Button text="Play" name="StatusActionButton" style="position: absolute; width: 90%; align-self: center; display: flex; align-content: center; top: auto; left: auto;" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="PlayerStatus" style="flex-grow: 1; height: 40%;">
                         <ui:VisualElement name="PlayerArrow" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/EterraPocket/Images/green_arrow.png?fileID=2800000&amp;guid=9da16e54fd28142fa97eae16986ee98a&amp;type=3#green_arrow&quot;); height: 40%; background-color: rgba(72, 72, 72, 0);" />
                     </ui:VisualElement>
                 </ui:VisualElement>

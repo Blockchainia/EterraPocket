@@ -17,6 +17,7 @@ namespace Assets.Scripts
   {
     MainChoose,
     Play,
+    PlayInit,
     PlaySelect,
     PlayFinish,
     PlayWaiting,
@@ -89,6 +90,7 @@ namespace Assets.Scripts
 
       var playScreenSubStates = new Dictionary<GameSubScreen, IScreenState>
             {
+                { GameSubScreen.PlayInit, new PlayInitSubState(this, playScreen) },
                 { GameSubScreen.PlaySelect, new PlaySelectSubState(this, playScreen) },
                 { GameSubScreen.PlayFinish, new PlayFinishSubState(this, playScreen) },
                 { GameSubScreen.PlayWaiting, new PlayWaitingSubState(this, playScreen) },
