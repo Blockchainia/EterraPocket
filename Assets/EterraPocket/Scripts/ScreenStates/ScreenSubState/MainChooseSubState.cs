@@ -16,6 +16,7 @@ namespace Assets.Scripts.ScreenStates
 
     private Button _btnReset;
 
+    private Button _btnTrain;
     public MainChooseSubState(GameController flowController, GameBaseState parent)
         : base(flowController, parent) { }
 
@@ -36,6 +37,10 @@ namespace Assets.Scripts.ScreenStates
       _btnPlay = elementInstance.Q<Button>("BtnPlay");
       _btnPlay.SetEnabled(false);
       _btnPlay.RegisterCallback<ClickEvent>(OnBtnPlayClicked);
+
+      _btnTrain = elementInstance.Q<Button>("BtnTrain");
+      _btnTrain.SetEnabled(true);
+      _btnTrain.RegisterCallback<ClickEvent>(OnBtnTrainClicked);
 
       var btnExit = elementInstance.Q<Button>("BtnExit");
       btnExit.RegisterCallback<ClickEvent>(OnBtnExitClicked);
@@ -58,6 +63,14 @@ namespace Assets.Scripts.ScreenStates
     private void OnBtnPlayClicked(ClickEvent evt)
     {
       Debug.Log($"[{this.GetType().Name}][SUB] OnBtnPlayClicked");
+      FlowController.ChangeScreenState(GameScreen.PlayScreen);
+
+    }
+
+    private void OnBtnTrainClicked(ClickEvent evt)
+    {
+      Debug.Log($"[{this.GetType().Name}][SUB] OnBtnTrainClicked");
+      FlowController.ChangeScreenState(GameScreen.PlayScreen);
 
     }
 

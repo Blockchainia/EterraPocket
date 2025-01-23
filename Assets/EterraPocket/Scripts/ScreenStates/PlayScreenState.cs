@@ -25,7 +25,7 @@ namespace Assets.Scripts.ScreenStates
       var topFiller = FlowController.VelContainer.Q<VisualElement>("VelTopFiller");
       //topFiller.style.backgroundColor = GameConstant.ColorDark;
 
-      var visualTreeAsset = Resources.Load<VisualTreeAsset>($"DemoGame/UI/Screens/PlayScreenUI");
+      var visualTreeAsset = Resources.Load<VisualTreeAsset>($"UI/Screens/PlayScreenUI");
       var instance = visualTreeAsset.Instantiate();
       instance.style.width = new Length(100, LengthUnit.Percent);
       instance.style.height = new Length(98, LengthUnit.Percent);
@@ -34,7 +34,7 @@ namespace Assets.Scripts.ScreenStates
       FlowController.VelContainer.Add(instance);
 
       // load initial sub state
-      //FlowController.ChangeScreenSubState(GameScreen.PlayScreen, GameSubScreen.PlaySelect);
+      FlowController.ChangeScreenSubState(GameScreen.PlayScreen, GameSubScreen.PlaySelect);
 
       // initial update
     }
