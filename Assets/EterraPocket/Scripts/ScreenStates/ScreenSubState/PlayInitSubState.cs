@@ -19,7 +19,6 @@ namespace Assets.Scripts.ScreenStates
 
     private Coroutine _timerCoroutine;
 
-
     public PlayInitSubState(GameController flowController, GameBaseState parent)
         : base(flowController, parent) { }
 
@@ -57,23 +56,13 @@ namespace Assets.Scripts.ScreenStates
       _btnPlayerReady.SetEnabled(true);
       _lblOpponentReady.style.display = DisplayStyle.Flex;
       _btnPlayerReady.clicked += OnPlayerReadyClicked;
-    }
 
-    private void OnReadyClicked()
-    {
-      _statusActionButton.SetEnabled(false);
+      // Start the timer coroutine
+      if (_timerCoroutine != null)
+      {
+        FlowController.StopCoroutine(_timerCoroutine);
+      }
       _timerCoroutine = FlowController.StartCoroutine(StartTimer());
-    }
-
-    private void OnPlayerReadyClicked()
-    {
-      Debug.Log("Player ready button clicked. Transitioning to PlayPlayerTurnSubState.");
-      _btnPlayerReady.style.display = DisplayStyle.None;
-      _lblOpponentReady.style.display = DisplayStyle.None;
-      _btnPlayerReady.SetEnabled(false);
-      _lblOpponentReady.SetEnabled(false);
-      // FlowController.StartCoroutine(StartTimer());
-      FlowController.ChangeScreenSubState(GameScreen.PlayScreen, GameSubScreen.PlayPlayerTurn);
     }
 
     private IEnumerator StartTimer()
@@ -85,34 +74,51 @@ namespace Assets.Scripts.ScreenStates
         UpdateTime(elapsedPercentage);
         yield return new WaitForSeconds(1f);
       }
+
+      Debug.Log("Timer finished in PlayInitSubState.");
     }
 
     public void UpdateTime(float percentageElapsed)
     {
+      Debug.Log($"[Timer] Updating time: {percentageElapsed}% elapsed.");
+
       _timeSpent.style.height = new StyleLength(Length.Percent(percentageElapsed));
       _timeLeft.style.height = new StyleLength(Length.Percent(100 - percentageElapsed));
     }
 
-    public void SetStatusText(string text)
+    private void OnReadyClicked()
     {
-      _statusLabel.text = text;
+      Debug.Log("Ready button clicked.");
+      _statusActionButton.SetEnabled(false);
+      // No need to start the timer here as it's already started in InitializeGameState
     }
 
-    public void SetArrowState(VisualElement arrow, bool enabled, Color backgroundColor)
+    private void OnPlayerReadyClicked()
     {
-      arrow.style.display = enabled ? DisplayStyle.Flex : DisplayStyle.None;
-      arrow.style.backgroundColor = new StyleColor(backgroundColor);
+      Debug.Log("Player ready button clicked. Transitioning to PlayPlayerTurnSubState.");
+      _btnPlayerReady.style.display = DisplayStyle.None;
+      _lblOpponentReady.style.display = DisplayStyle.None;
+      _btnPlayerReady.SetEnabled(false);
+      _lblOpponentReady.SetEnabled(false);
+
+      FlowController.ChangeScreenSubState(GameScreen.PlayScreen, GameSubScreen.PlayPlayerTurn);
     }
 
     public override void ExitState()
     {
       Debug.Log($"[{this.GetType().Name}][SUB] ExitState");
 
+      // Stop the timer coroutine if it is running
       if (_timerCoroutine != null)
       {
         FlowController.StopCoroutine(_timerCoroutine);
         _timerCoroutine = null;
+        Debug.Log("Timer coroutine stopped in ExitState.");
       }
+
+      // Unsubscribe from button events
+      _statusActionButton.clicked -= OnReadyClicked;
+      _btnPlayerReady.clicked -= OnPlayerReadyClicked;
     }
   }
 }
