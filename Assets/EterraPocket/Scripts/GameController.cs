@@ -18,6 +18,8 @@ namespace Assets.Scripts
     MainChoose,
     Play,
     PlayInit,
+    PlayPlayerTurn,
+    PlayOpponentTurn,
     PlaySelect,
     PlayFinish,
     PlayWaiting,
@@ -92,6 +94,8 @@ namespace Assets.Scripts
             {
                 { GameSubScreen.PlayInit, new PlayInitSubState(this, playScreen) },
                 { GameSubScreen.PlaySelect, new PlaySelectSubState(this, playScreen) },
+                { GameSubScreen.PlayPlayerTurn, new PlayPlayerTurnSubState(this, playScreen) },
+                { GameSubScreen.PlayOpponentTurn, new PlayOpponentTurnSubState(this, playScreen) },
                 { GameSubScreen.PlayFinish, new PlayFinishSubState(this, playScreen) },
                 { GameSubScreen.PlayWaiting, new PlayWaitingSubState(this, playScreen) },
             };

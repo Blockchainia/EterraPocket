@@ -14,6 +14,11 @@ namespace Assets.Scripts.ScreenStates
     private VisualElement _timeLeft;
     private Label _playerScore;
     private Label _opponentScore;
+    private Button _btnPlayerReady;
+    private Label _lblOpponentReady;
+
+    private Coroutine _timerCoroutine;
+
 
     public PlayInitSubState(GameController flowController, GameBaseState parent)
         : base(flowController, parent) { }
@@ -24,14 +29,16 @@ namespace Assets.Scripts.ScreenStates
 
       var root = FlowController.VelContainer.Q<VisualElement>("Screen");
 
-      _statusLabel = root.Q<Label>("StatusLabel");
-      _statusActionButton = root.Q<Button>("StatusActionButton");
+      _statusLabel = root.Q<Label>("lblStatusLabel");
+      _statusActionButton = root.Q<Button>("btnStatusActionButton");
       _playerArrow = root.Q<VisualElement>("PlayerArrow");
       _opponentArrow = root.Q<VisualElement>("OpponentArrow");
       _timeSpent = root.Q<VisualElement>("TimeSpent");
       _timeLeft = root.Q<VisualElement>("TimeLeft");
       _playerScore = root.Q<Label>("lblPlayerScore");
       _opponentScore = root.Q<Label>("lblOpponentScore");
+      _btnPlayerReady = root.Q<Button>("btnPlayerReady");
+      _lblOpponentReady = root.Q<Label>("lblOpponentReady");
 
       InitializeGameState();
     }
@@ -46,12 +53,27 @@ namespace Assets.Scripts.ScreenStates
       _statusActionButton.text = "Ready";
       _statusActionButton.SetEnabled(true);
       _statusActionButton.clicked += OnReadyClicked;
+
+      _btnPlayerReady.SetEnabled(true);
+      _lblOpponentReady.style.display = DisplayStyle.Flex;
+      _btnPlayerReady.clicked += OnPlayerReadyClicked;
     }
 
     private void OnReadyClicked()
     {
       _statusActionButton.SetEnabled(false);
-      FlowController.StartCoroutine(StartTimer());
+      _timerCoroutine = FlowController.StartCoroutine(StartTimer());
+    }
+
+    private void OnPlayerReadyClicked()
+    {
+      Debug.Log("Player ready button clicked. Transitioning to PlayPlayerTurnSubState.");
+      _btnPlayerReady.style.display = DisplayStyle.None;
+      _lblOpponentReady.style.display = DisplayStyle.None;
+      _btnPlayerReady.SetEnabled(false);
+      _lblOpponentReady.SetEnabled(false);
+      // FlowController.StartCoroutine(StartTimer());
+      FlowController.ChangeScreenSubState(GameScreen.PlayScreen, GameSubScreen.PlayPlayerTurn);
     }
 
     private IEnumerator StartTimer()
@@ -85,6 +107,12 @@ namespace Assets.Scripts.ScreenStates
     public override void ExitState()
     {
       Debug.Log($"[{this.GetType().Name}][SUB] ExitState");
+
+      if (_timerCoroutine != null)
+      {
+        FlowController.StopCoroutine(_timerCoroutine);
+        _timerCoroutine = null;
+      }
     }
   }
 }
