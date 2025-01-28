@@ -1,11 +1,11 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
     <ui:VisualElement name="Screen" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/EterraPocket/Images/board_background.png?fileID=2800000&amp;guid=c4c0888e708284a919e6dfd2de936fae&amp;type=3#board_background&quot;);">
         <ui:VisualElement name="TopBound" style="flex-grow: 1; height: 2%;" />
-        <ui:VisualElement name="FloatBody" style="flex-grow: 1; height: 90%;">
+        <ui:VisualElement name="FloatBody" style="flex-grow: 1; height: 96%;">
             <ui:VisualElement name="OpponentDeckUI" style="flex-grow: 1; height: 15%; flex-direction: row;">
                 <ui:VisualElement name="LeftBound" style="flex-grow: 1; width: 10%;" />
                 <ui:VisualElement name="OpponentDeckHolderUI" style="flex-grow: 1; flex-direction: row; width: 80%;">
-                    <ui:Label text="Opponent Not Ready&#10;" name="lblOpponentReady" style="flex-direction: row; position: relative; width: 100%; align-content: center; top: 0; left: 0; -unity-font-style: bold; -unity-text-align: upper-center; background-color: rgb(123, 123, 123);" />
+                    <ui:Label text="Opponent Not Ready&#10;" name="lblOpponentReady" style="flex-direction: row; position: relative; width: 100%; align-content: center; top: 0; left: 0; -unity-font-style: bold; -unity-text-align: middle-center; background-color: rgb(123, 123, 123); align-items: auto; align-self: center; min-height: 80%; font-size: 50%;" />
                     <ui:VisualElement name="opponent-deck-0" style="flex-grow: 1;" />
                     <ui:VisualElement name="opponent-deck-1" style="flex-grow: 1;" />
                     <ui:VisualElement name="opponent-deck-2" style="flex-grow: 1;" />
@@ -18,15 +18,15 @@
                 <ui:VisualElement name="TimerHolder" style="flex-grow: 1; width: 15%;">
                     <ui:VisualElement name="ScoreBox" style="flex-grow: 1; height: 35%; border-top-width: 2px; border-right-width: 2px; border-bottom-width: 2px; border-left-width: 2px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0);">
                         <ui:VisualElement name="OpponentScore" style="flex-grow: 1; background-color: rgba(192, 192, 192, 0.63); height: 49%;">
-                            <ui:Label text="5&#10;" name="lblOpponentScore" style="-unity-text-align: middle-center; -unity-font-style: bold; -unity-font-definition: url(&quot;project://database/Assets/EterraPocket/Fonts/matrix%203.ttf?fileID=12800000&amp;guid=8baed8cd294c1452987b9f72eefbdd7e&amp;type=3#matrix 3&quot;); font-size: 30px;" />
+                            <ui:Label text="5&#10;" name="lblOpponentScore" style="-unity-text-align: middle-center; -unity-font-style: bold; -unity-font-definition: url(&quot;project://database/Assets/EterraPocket/Fonts/matrix%203.ttf?fileID=12800000&amp;guid=8baed8cd294c1452987b9f72eefbdd7e&amp;type=3#matrix 3&quot;); font-size: 40%; justify-content: center; align-self: center; max-height: 40%;" />
                         </ui:VisualElement>
                         <ui:VisualElement name="ScoreDivider" style="flex-grow: 1; height: 2%; background-color: rgb(0, 0, 0);" />
                         <ui:VisualElement name="PlayerScore" style="flex-grow: 1; background-color: rgba(204, 204, 204, 0.65); height: 49%;">
-                            <ui:Label text="5" name="lblPlayerScore" style="font-size: 30px; -unity-font-style: bold; -unity-font-definition: url(&quot;project://database/Assets/EterraPocket/Fonts/matrix%203.ttf?fileID=12800000&amp;guid=8baed8cd294c1452987b9f72eefbdd7e&amp;type=3#matrix 3&quot;); -unity-text-align: middle-center;" />
+                            <ui:Label text="5" name="lblPlayerScore" style="font-size: 40%; -unity-font-style: bold; -unity-font-definition: url(&quot;project://database/Assets/EterraPocket/Fonts/matrix%203.ttf?fileID=12800000&amp;guid=8baed8cd294c1452987b9f72eefbdd7e&amp;type=3#matrix 3&quot;); -unity-text-align: middle-center; justify-content: center; align-self: center; max-height: 40%;" />
                         </ui:VisualElement>
                     </ui:VisualElement>
                     <ui:VisualElement name="Timer" style="flex-grow: 0; height: 65%; border-top-width: 2px; border-right-width: 2px; border-bottom-width: 2px; border-left-width: 2px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); align-items: stretch; flex-direction: column; flex-shrink: 0; justify-content: flex-start; align-self: stretch;">
-                        <ui:VisualElement name="TimeSpent" style="flex-grow: 1; height: 1%; background-color: rgb(75, 75, 75); align-self: stretch; align-items: auto;" />
+                        <ui:VisualElement name="TimeSpent" style="flex-grow: 1; height: 0; background-color: rgb(75, 75, 75); align-self: stretch; align-items: auto;" />
                         <ui:VisualElement name="TimeLeft" style="flex-grow: 1; height: 100%; background-color: rgb(4, 255, 26); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; border-left-color: rgb(255, 248, 11); border-right-color: rgb(255, 248, 11); border-top-color: rgb(255, 248, 11); border-bottom-color: rgb(255, 248, 11); align-self: stretch; align-items: auto;" />
                     </ui:VisualElement>
                 </ui:VisualElement>
@@ -66,8 +66,7 @@
                         <ui:VisualElement name="OpponentArrow" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/EterraPocket/Images/red_arrow.png?fileID=2800000&amp;guid=f45dd268b15c14cb2a776236e747824e&amp;type=3#red_arrow&quot;); height: 40%; visibility: visible; display: flex;" />
                     </ui:VisualElement>
                     <ui:VisualElement name="StatusDisplayHolder" style="flex-grow: 1; height: 20%; justify-content: center; position: relative;">
-                        <ui:Label text="TURN" name="lblStatusLabel" style="height: auto; white-space: normal; font-size: 13px; -unity-font-style: bold; -unity-font-definition: url(&quot;project://database/Assets/EterraPocket/Fonts/matrix-ii-bold%203.otf?fileID=12800000&amp;guid=b35446d6656694b839a274fd7e241459&amp;type=3#matrix-ii-bold 3&quot;); -unity-text-align: middle-center; border-top-width: 0; border-right-width: 2px; border-bottom-width: 0; border-left-width: 2px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); background-color: rgba(255, 255, 255, 0.46); position: absolute; align-self: center; justify-content: flex-start; align-items: center; align-content: center; flex-direction: column;" />
-                        <ui:Button text="Play" name="btnStatusActionButton" style="position: absolute; width: 90%; align-self: center; display: flex; align-content: center; top: auto; left: auto;" />
+                        <ui:Button text="Play" name="btnStatusActionButton" style="position: relative; width: 90%; align-self: center; display: flex; align-content: center; top: auto; left: auto; font-size: 50%; -unity-font-style: bold; -unity-font-definition: url(&quot;project://database/Assets/EterraPocket/Fonts/matrix%203.ttf?fileID=12800000&amp;guid=8baed8cd294c1452987b9f72eefbdd7e&amp;type=3#matrix 3&quot;); height: 90%; min-height: 90%;" />
                     </ui:VisualElement>
                     <ui:VisualElement name="PlayerStatus" style="flex-grow: 1; height: 40%;">
                         <ui:VisualElement name="PlayerArrow" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/EterraPocket/Images/green_arrow.png?fileID=2800000&amp;guid=9da16e54fd28142fa97eae16986ee98a&amp;type=3#green_arrow&quot;); height: 40%; background-color: rgba(72, 72, 72, 0);" />
@@ -77,7 +76,7 @@
             <ui:VisualElement name="PlayerDeckUI" style="flex-grow: 1; height: 25%; flex-direction: row;">
                 <ui:VisualElement name="LeftBound" style="flex-grow: 1; width: 10%;" />
                 <ui:VisualElement name="PlayerDeckHolder" style="flex-grow: 1; flex-direction: row; width: 80%; align-content: center;">
-                    <ui:Button text="Ready&#10;" name="btnPlayerReady" style="position: relative; width: 100%; align-self: center; align-items: auto; justify-content: center; flex-direction: row; align-content: auto; min-width: 100px;" />
+                    <ui:Button text="Ready&#10;" name="btnPlayerReady" style="position: relative; width: 100%; align-self: center; align-items: auto; justify-content: center; flex-direction: row; align-content: auto; min-width: 100px; min-height: 50%; font-size: 50%;" />
                     <ui:VisualElement name="player-deck-0" style="flex-grow: 1;" />
                     <ui:VisualElement name="player-deck-1" style="flex-grow: 1;" />
                     <ui:VisualElement name="player-deck-2" style="flex-grow: 1;" />
@@ -87,6 +86,6 @@
                 <ui:VisualElement name="RightBound" style="flex-grow: 1; width: 10%;" />
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement name="BottomBound" style="flex-grow: 1; height: 5%;" />
+        <ui:VisualElement name="BottomBound" style="flex-grow: 1; height: 2%;" />
     </ui:VisualElement>
 </ui:UXML>
