@@ -11,6 +11,9 @@ namespace Assets.Scripts.ScreenStates
     private VisualElement _timeLeft;
     private Coroutine _timerCoroutine;
     private float _elapsedPercentage;
+    private VisualElement _opponentArrow; // Reference to the OpponentArrow UI element
+    private VisualElement _playerArrow; // Reference to the OpponentArrow UI element
+
 
     public PlayPlayerTurnSubState(GameController flowController, GameBaseState parent)
         : base(flowController, parent) { }
@@ -23,6 +26,29 @@ namespace Assets.Scripts.ScreenStates
       _btnStatusActionButton = root.Q<Button>("btnStatusActionButton");
       _timeSpent = root.Q<VisualElement>("TimeSpent");
       _timeLeft = root.Q<VisualElement>("TimeLeft");
+      _opponentArrow = root.Q<VisualElement>("OpponentArrow"); // Get the OpponentArrow element
+      _playerArrow = root.Q<VisualElement>("PlayerArrow"); // Get the OpponentArrow element
+
+      // Disable the OpponentArrow
+      if (_opponentArrow != null)
+      {
+        _opponentArrow.style.display = DisplayStyle.None;
+        Debug.Log("OpponentArrow has been disabled.");
+      }
+      else
+      {
+        Debug.LogError("OpponentArrow element not found!");
+      }
+      // Enable the PlayerArrow
+      if (_playerArrow != null)
+      {
+        _playerArrow.style.display = DisplayStyle.Flex;
+        Debug.Log("PlayerArrow has been enabled.");
+      }
+      else
+      {
+        Debug.LogError("PlayerArrow element not found!");
+      }
 
       // Reset and initialize timer
       ResetTimer();

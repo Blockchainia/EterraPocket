@@ -16,11 +16,13 @@ namespace Assets.Scripts.ScreenStates
     private Label _opponentScore;
     private Button _btnPlayerReady;
     private Label _lblOpponentReady;
-
     private Coroutine _timerCoroutine;
 
     public PlayInitSubState(GameController flowController, GameBaseState parent)
-        : base(flowController, parent) { }
+        : base(flowController, parent)
+    {
+
+    }
 
     public override void EnterState()
     {
@@ -39,6 +41,28 @@ namespace Assets.Scripts.ScreenStates
       _btnPlayerReady = root.Q<Button>("btnPlayerReady");
       _lblOpponentReady = root.Q<Label>("lblOpponentReady");
 
+      // Disable the OpponentArrow
+      if (_opponentArrow != null)
+      {
+        _opponentArrow.style.display = DisplayStyle.None;
+        Debug.Log("OpponentArrow has been disabled.");
+      }
+      else
+      {
+        Debug.LogError("OpponentArrow element not found!");
+      }
+
+      // Enable the PlayerArrow
+      if (_playerArrow != null)
+      {
+        _playerArrow.style.display = DisplayStyle.Flex;
+        Debug.Log("PlayerArrow has been enabled.");
+      }
+      else
+      {
+        Debug.LogError("PlayerArrow element not found!");
+      }
+
       InitializeGameState();
     }
 
@@ -49,9 +73,8 @@ namespace Assets.Scripts.ScreenStates
       _timeSpent.style.height = new StyleLength(Length.Percent(0));
       _timeLeft.style.height = new StyleLength(Length.Percent(100));
 
-      _statusActionButton.text = "Ready";
-      _statusActionButton.SetEnabled(true);
-      _statusActionButton.clicked += OnReadyClicked;
+      _statusActionButton.text = "Play";
+      _statusActionButton.SetEnabled(false);
 
       _btnPlayerReady.SetEnabled(true);
       _lblOpponentReady.style.display = DisplayStyle.Flex;
@@ -86,13 +109,6 @@ namespace Assets.Scripts.ScreenStates
       _timeLeft.style.height = new StyleLength(Length.Percent(100 - percentageElapsed));
     }
 
-    private void OnReadyClicked()
-    {
-      Debug.Log("Ready button clicked.");
-      _statusActionButton.SetEnabled(false);
-      // No need to start the timer here as it's already started in InitializeGameState
-    }
-
     private void OnPlayerReadyClicked()
     {
       Debug.Log("Player ready button clicked. Transitioning to PlayPlayerTurnSubState.");
@@ -117,7 +133,6 @@ namespace Assets.Scripts.ScreenStates
       }
 
       // Unsubscribe from button events
-      _statusActionButton.clicked -= OnReadyClicked;
       _btnPlayerReady.clicked -= OnPlayerReadyClicked;
     }
   }
