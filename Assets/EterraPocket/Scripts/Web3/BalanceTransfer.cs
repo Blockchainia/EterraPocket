@@ -22,6 +22,8 @@ namespace Assets.Scripts
     private static string NodeUrl = "ws://127.0.0.1:9944";
     private static SubstrateNetwork client;
 
+    public SubstrateNetwork Client => client;
+
     #region Account Initialization
 
     public static MiniSecret MiniSecretAlice => new MiniSecret(
@@ -168,7 +170,7 @@ namespace Assets.Scripts
       return BalanceTransfer.Bob.ToAccountId32();
     }
 
-    public static async Task SubmitTransfer(SubstrateNetwork client)
+    public async Task SubmitTransfer(SubstrateNetwork client)
     {
       if (!ValidateClient(client))
       {

@@ -16,6 +16,7 @@ namespace Assets.Scripts
   public enum GameSubScreen
   {
     MainChoose,
+    MainTest,
     Play,
     PlayInit,
     PlayPlayerTurn,
@@ -83,6 +84,7 @@ namespace Assets.Scripts
       var mainScreenSubStates = new Dictionary<GameSubScreen, IScreenState>
             {
                 { GameSubScreen.MainChoose, new MainChooseSubState(this, mainScreen) },
+                { GameSubScreen.MainTest, new MainTestSubState(this, mainScreen) },
                 { GameSubScreen.Play, new MainPlaySubState(this, mainScreen) },
             };
       _subStateDictionary.Add(GameScreen.MainScreen, mainScreenSubStates);

@@ -16,6 +16,8 @@ namespace Assets.Scripts.ScreenStates
 
     private Button _btnReset;
 
+    private Button _btnTest;
+
     private Button _btnTrain;
     public MainChooseSubState(GameController flowController, GameBaseState parent)
         : base(flowController, parent) { }
@@ -32,7 +34,7 @@ namespace Assets.Scripts.ScreenStates
 
       var scrollView = scrollViewElement.Q<ScrollView>("ScvElement");
 
-      TemplateContainer elementInstance = ElementInstance("UI/Frames/ChooseFrame");
+      TemplateContainer elementInstance = ElementInstance("UI/Frames/PlayMenu");
 
       _btnPlay = elementInstance.Q<Button>("BtnPlay");
       _btnPlay.SetEnabled(false);
@@ -41,6 +43,10 @@ namespace Assets.Scripts.ScreenStates
       _btnTrain = elementInstance.Q<Button>("BtnTrain");
       _btnTrain.SetEnabled(true);
       _btnTrain.RegisterCallback<ClickEvent>(OnBtnTrainClicked);
+
+      _btnTest = elementInstance.Q<Button>("BtnTest");
+      _btnTest.SetEnabled(true);
+      _btnTest.RegisterCallback<ClickEvent>(OnBtnTestClicked);
 
       var btnExit = elementInstance.Q<Button>("BtnExit");
       btnExit.RegisterCallback<ClickEvent>(OnBtnExitClicked);
@@ -71,6 +77,13 @@ namespace Assets.Scripts.ScreenStates
     {
       Debug.Log($"[{this.GetType().Name}][SUB] OnBtnTrainClicked");
       FlowController.ChangeScreenState(GameScreen.PlayScreen);
+
+    }
+
+    private void OnBtnTestClicked(ClickEvent evt)
+    {
+      Debug.Log($"[{this.GetType().Name}][SUB] OnBtnTestClicked");
+      FlowController.ChangeScreenSubState(GameScreen.MainScreen, GameSubScreen.MainTest);
 
     }
 
