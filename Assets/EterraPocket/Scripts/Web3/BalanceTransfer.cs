@@ -14,6 +14,7 @@ using Eterra.NetApiExt.Generated.Model.sp_runtime.multiaddress;
 using Eterra.NetApiExt.Generated.Storage;
 using Eterra.NetApiExt.Generated;
 using Eterra.NetApiExt.Helper;
+using System.Numerics;
 
 namespace Assets.Scripts
 {
@@ -210,6 +211,107 @@ namespace Assets.Scripts
         Debug.LogError($"[BalanceTransfer] Error during TransferKeepAlive: {ex.Message}");
       }
     }
+
+
+    public async Task<string> CreateGame(SubstrateNetwork client)
+    {
+      if (!ValidateClient(client))
+      {
+        Debug.LogError("[BalanceTransfer] Client validation failed.");
+        return "Client validation failed"; // Ensure a string is returned
+      }
+
+      var bertaAccount = "5DAAnrj7VHTznn2AWBemMuyBwZWs6FNFjdyVXUeYum3PTXFy".ToAccountId32();
+
+      Debug.Log("[BalanceTransfer] Retrieving Berta's account info...");
+      var bertaAccountInfo = await client.GetAccountAsync(bertaAccount, CancellationToken.None);
+
+      if (bertaAccountInfo == null)
+      {
+        Debug.LogWarning("[BalanceTransfer] Berta's account does not exist!");
+      }
+      else
+      {
+        Debug.Log($"[BalanceTransfer] Berta's Account Info: Free={bertaAccountInfo.Data.Free}, Frozen={bertaAccountInfo.Data.Frozen}, Reserved={bertaAccountInfo.Data.Reserved}");
+      }
+
+      Debug.Log("[BalanceTransfer] Submitting CreateGameKeepAliveAsync...");
+      var extrinsicType = "EterraCalls.CreateGame";
+
+      // Ensure both Alice and Bob are included
+      var accountVec = new BaseVec<AccountId32>();
+      accountVec.Create(new AccountId32[] { aliceAccount, Bob.ToAccountId32() });
+
+      var extrinsic = EterraCalls.CreateGame(accountVec);
+
+      try
+      {
+        // Ensure transaction is signed by Alice
+        var subscriptionId = await client.GenericExtrinsicAsync(Alice, extrinsicType, extrinsic, 1, CancellationToken.None);
+
+        if (subscriptionId == null)
+        {
+          Debug.LogWarning("[BalanceTransfer] Eterra.CreateGame subscription failed.");
+          return "Subscription failed"; // Ensure a string is returned
+        }
+
+        Debug.Log($"[BalanceTransfer] Eterra.CreateGame subscriptionId: {subscriptionId}");
+
+        return subscriptionId.ToString(); // Convert to string to avoid type mismatch
+      }
+      catch (Exception ex)
+      {
+        Debug.LogError($"[BalanceTransfer] Error during Eterra.CreateGame: {ex.Message}");
+        return $"Error: {ex.Message}"; // Ensure a string is returned
+      }
+    }
+
+    /// <summary>
+    /// Transfer keep alive
+    /// </summary>
+    /// <param name="account"></param>
+    /// <param name="dest"></param>
+    /// <param name="value"></param>
+    /// <param name="concurrentTasks"></param>
+    /// <param name="token"></param>
+    /// <returns></returns>
+    public async Task<string> CreateGameKeepAliveAsync(Account account, AccountId32 dest, BigInteger value, int concurrentTasks, CancellationToken token)
+    {
+      var extrinsicType = "Eterra.CreateGame";
+
+      if (!client.IsConnected || account == null)
+      {
+        return null;
+      }
+
+      var multiAddress = new EnumMultiAddress();
+      multiAddress.Create(MultiAddress.Id, dest);
+
+      // Convert dest to BaseVec<AccountId32> with an array
+      var accountVec = new BaseVec<AccountId32>();
+      accountVec.Create(new AccountId32[] { dest });
+
+      var extrinsic = EterraCalls.CreateGame(accountVec);
+
+      try
+      {
+        var subscriptionId = await client.GenericExtrinsicAsync(account, extrinsicType, extrinsic, concurrentTasks, token);
+        if (subscriptionId == null)
+        {
+          Debug.LogWarning("[BalanceTransfer] Eterra.CreateGame subscription failed.");
+          return null;
+        }
+        Debug.Log($"[BalanceTransfer] Eterra.CreateGame subscriptionId: {subscriptionId}");
+
+        return subscriptionId;
+      }
+      catch (Exception ex)
+      {
+        Debug.LogError($"[BalanceTransfer] Error during Eterra.CreateGame: {ex.Message}");
+        return null;
+      }
+    }
+
 
     #endregion
   }

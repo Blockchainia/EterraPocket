@@ -80,9 +80,26 @@ namespace Assets.Scripts.ScreenStates
       await BalanceTransfer.Instance.SubmitTransfer(BalanceTransfer.Instance.Client);
     }
 
-    private void OnBtnCreateGameClicked(ClickEvent evt)
+    private async void OnBtnCreateGameClicked(ClickEvent evt)
     {
       Debug.Log($"[{this.GetType().Name}][SUB] OnBtnCreateGameClicked");
+      // Ensure BalanceTransfer instance exists
+      if (BalanceTransfer.Instance == null)
+      {
+        Debug.LogError("[MainTestSubState] BalanceTransfer instance is null!");
+        return;
+      }
+
+      // Ensure client is initialized and connected
+      if (BalanceTransfer.Instance.Client == null || !BalanceTransfer.Instance.Client.IsConnected)
+      {
+        Debug.LogError("[MainTestSubState] BalanceTransfer client is not connected!");
+        return;
+      }
+
+      // Call SubmitTransfer asynchronously
+      await BalanceTransfer.Instance.CreateGame(BalanceTransfer.Instance.Client);
+
       // FlowController.ChangeScreenState(GameScreen.PlayScreen);
 
     }

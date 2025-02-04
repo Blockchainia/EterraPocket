@@ -467,6 +467,8 @@ namespace Assets.Scripts
       return await GenericExtrinsicAsync(account, extrinsicType, extrinsic, concurrentTasks, token);
     }
 
+
+    
     /// <summary>
     /// Submit a sudo extrinsic.
     /// </summary>
