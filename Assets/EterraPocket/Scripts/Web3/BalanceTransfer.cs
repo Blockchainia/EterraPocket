@@ -6,15 +6,20 @@ using Substrate.NetApi;
 using Substrate.NetApi.Model.Rpc;
 using Substrate.NetApi.Model.Types;
 using UnityEngine;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Threading;
 using System;
+using Eterra.NetApiExt.Generated.Storage;  // Import EterraCalls
 using Eterra.NetApiExt.Generated.Model.sp_core.crypto;
 using Eterra.NetApiExt.Generated.Model.sp_runtime.multiaddress;
-using Eterra.NetApiExt.Generated.Storage;
+using Eterra.NetApiExt.Generated.Model.pallet_eterra.pallet;  // Import EnumCall and Call
+using Eterra.NetApiExt.Generated.Model.solochain_template_runtime; // Import EnumRuntimeCallusing Eterra.NetApiExt.Generated.Storage;
 using Eterra.NetApiExt.Generated;
 using Eterra.NetApiExt.Helper;
+using Eterra.Integration.Model;
 using System.Numerics;
+using Eterra.NetApiExt.Client;
 
 namespace Assets.Scripts
 {
@@ -80,7 +85,7 @@ namespace Assets.Scripts
 
       client.ExtrinsicManager.ExtrinsicUpdated += (id, info) =>
       {
-        Debug.Log($"[BalanceTransfer] ExtrinsicUpdated: ID={id}, Event={info.TransactionEvent}");
+        Debug.Log($"[BalanceTransfer] ExtrinsicUpdated: ID={id}, Event={info.TransactionEvent}, Other={info}");
       };
 
       ConnectClientAsync(client, nodeUrl).ConfigureAwait(false);
@@ -212,59 +217,89 @@ namespace Assets.Scripts
       }
     }
 
-
     public async Task<string> CreateGame(SubstrateNetwork client)
     {
       if (!ValidateClient(client))
       {
-        Debug.LogError("[BalanceTransfer] Client validation failed.");
-        return "Client validation failed"; // Ensure a string is returned
+        Debug.LogError("[CreateGame] Client validation failed.");
+        return "Client validation failed";
       }
 
-      var bertaAccount = "5DAAnrj7VHTznn2AWBemMuyBwZWs6FNFjdyVXUeYum3PTXFy".ToAccountId32();
+      Debug.Log("[CreateGame] Preparing CreateGame extrinsic...");
 
-      Debug.Log("[BalanceTransfer] Retrieving Berta's account info...");
-      var bertaAccountInfo = await client.GetAccountAsync(bertaAccount, CancellationToken.None);
+      // ✅ Ensure Alice and Bob accounts are correctly initialized
+      var aliceAccount = Alice.ToAccountId32();
+      var bobAccount = Bob.ToAccountId32();
 
-      if (bertaAccountInfo == null)
+      if (aliceAccount == null || bobAccount == null)
       {
-        Debug.LogWarning("[BalanceTransfer] Berta's account does not exist!");
-      }
-      else
-      {
-        Debug.Log($"[BalanceTransfer] Berta's Account Info: Free={bertaAccountInfo.Data.Free}, Frozen={bertaAccountInfo.Data.Frozen}, Reserved={bertaAccountInfo.Data.Reserved}");
+        Debug.LogError("[CreateGame] Alice or Bob's account is invalid.");
+        return "Invalid account";
       }
 
-      Debug.Log("[BalanceTransfer] Submitting CreateGameKeepAliveAsync...");
-      var extrinsicType = "EterraCalls.CreateGame";
+      Debug.Log($"[CreateGame] Players: Alice={aliceAccount}, Bob={bobAccount}");
 
-      // Ensure both Alice and Bob are included
+      // ✅ Ensure BaseVec<AccountId32> is correctly initialized
       var accountVec = new BaseVec<AccountId32>();
-      accountVec.Create(new AccountId32[] { aliceAccount, Bob.ToAccountId32() });
+      accountVec.Create(new AccountId32[] { aliceAccount, bobAccount });
 
-      var extrinsic = EterraCalls.CreateGame(accountVec);
+      // ✅ Use EnumCall for CreateGame extrinsic
+      var enumCall = new EnumCall();
+      enumCall.Create(Call.create_game, accountVec);
+
+      // ✅ Log the encoded EnumCall data in lowercase without hyphens
+      var encodedEnumCall = enumCall.Encode();
+      string encodedEnumCallHex = BitConverter.ToString(encodedEnumCall).Replace("-", "").ToLower();
+      Debug.Log($"[CreateGame] Encoded EnumCall: {encodedEnumCallHex}");
 
       try
       {
-        // Ensure transaction is signed by Alice
-        var subscriptionId = await client.GenericExtrinsicAsync(Alice, extrinsicType, extrinsic, 1, CancellationToken.None);
+        Debug.Log($"[CreateGame] Fetching nonce for Alice...");
+
+        // ✅ Get Account Info using available client method
+        var accountInfo = await client.GetAccountAsync(aliceAccount, CancellationToken.None);
+        if (accountInfo == null)
+        {
+          Debug.LogError("[CreateGame] Failed to retrieve Alice's account info.");
+          return "Account info retrieval failed";
+        }
+
+        uint nonce = accountInfo.Nonce;
+        Debug.Log($"[CreateGame] Alice's Nonce: {nonce}");
+
+        // ✅ Create the extrinsic
+        Debug.Log($"[CreateGame] Creating extrinsic...");
+        var extrinsicMethod = EterraCalls.CreateGame(accountVec);
+
+        // ✅ Encode the extrinsic
+        var encodedExtrinsic = extrinsicMethod.Encode();
+        string encodedExtrinsicHex = BitConverter.ToString(encodedExtrinsic).Replace("-", "").ToLower();
+        Debug.Log($"[CreateGame] Encoded Extrinsic (before signing): {encodedExtrinsicHex}");
+
+        // ✅ Submit extrinsic using the correct API method
+        Debug.Log($"[CreateGame] Submitting transaction...");
+        var subscriptionId = await client.GenericExtrinsicAsync(Alice, "Eterra.CreateGame", extrinsicMethod, 1, CancellationToken.None);
 
         if (subscriptionId == null)
         {
-          Debug.LogWarning("[BalanceTransfer] Eterra.CreateGame subscription failed.");
-          return "Subscription failed"; // Ensure a string is returned
+          Debug.LogWarning("[CreateGame] eterra.createGame submission failed.");
+          return "Submission failed";
         }
 
-        Debug.Log($"[BalanceTransfer] Eterra.CreateGame subscriptionId: {subscriptionId}");
+        Debug.Log($"[CreateGame] eterra.createGame transaction hash: {subscriptionId}");
 
-        return subscriptionId.ToString(); // Convert to string to avoid type mismatch
+        // ✅ Final log before returning
+        Debug.Log($"[CreateGame] Transaction successfully sent: {subscriptionId}");
+
+        return subscriptionId.ToString();
       }
       catch (Exception ex)
       {
-        Debug.LogError($"[BalanceTransfer] Error during Eterra.CreateGame: {ex.Message}");
-        return $"Error: {ex.Message}"; // Ensure a string is returned
+        Debug.LogError($"[CreateGame] Error during eterra.createGame: {ex.Message}");
+        return $"Error: {ex.Message}";
       }
     }
+
 
     /// <summary>
     /// Transfer keep alive
