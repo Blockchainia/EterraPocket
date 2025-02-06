@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Threading;
 using System;
+using System.Linq;
 using Eterra.NetApiExt.Generated.Storage;  // Import EterraCalls
 using Eterra.NetApiExt.Generated.Model.sp_core.crypto;
 using Eterra.NetApiExt.Generated.Model.sp_runtime.multiaddress;
@@ -217,136 +218,69 @@ namespace Assets.Scripts
       }
     }
 
+
+    public async Task<string?> CreateGameAsync(Account account, Account[] players, int concurrentTasks, CancellationToken token)
+    {
+      var extrinsicType = "EterraCalls.CreateGame"; // Ensure this matches the correct format
+
+      if (!client.IsConnected || account == null)
+      {
+        Debug.LogError("[CreateGameAsync] Client is not connected or Account is null.");
+        return null;
+      }
+
+      // Convert players to AccountId32 array and log each player
+      var playerAccountIds = players.Select(p => p.ToAccountId32()).ToArray();
+      Debug.Log($"[CreateGameAsync] Caller AccountId32: {BitConverter.ToString(account.ToAccountId32().Encode()).Replace("-", "").ToLower()}");
+
+      foreach (var player in playerAccountIds)
+      {
+        Debug.Log($"[CreateGameAsync] Player AccountId32: {BitConverter.ToString(player.Encode()).Replace("-", "").ToLower()}");
+      }
+
+      // ✅ FIXED: Pass the array directly into CreateGameAsync
+      return await CreateGameAsync(playerAccountIds, concurrentTasks, token);
+    }
+
     public async Task<string> CreateGame(SubstrateNetwork client)
     {
       if (!ValidateClient(client))
-      {
-        Debug.LogError("[CreateGame] Client validation failed.");
         return "Client validation failed";
-      }
 
-      Debug.Log("[CreateGame] Preparing CreateGame extrinsic...");
-
-      // ✅ Ensure Alice and Bob accounts are correctly initialized
       var aliceAccount = Alice.ToAccountId32();
       var bobAccount = Bob.ToAccountId32();
 
       if (aliceAccount == null || bobAccount == null)
-      {
-        Debug.LogError("[CreateGame] Alice or Bob's account is invalid.");
         return "Invalid account";
-      }
 
-      Debug.Log($"[CreateGame] Players: Alice={aliceAccount}, Bob={bobAccount}");
+      Debug.Log($"[CreateGame] Alice AccountId32: {BitConverter.ToString(aliceAccount.Encode()).Replace("-", "").ToLower()}");
+      Debug.Log($"[CreateGame] Bob AccountId32: {BitConverter.ToString(bobAccount.Encode()).Replace("-", "").ToLower()}");
 
-      // ✅ Ensure BaseVec<AccountId32> is correctly initialized
-      var accountVec = new BaseVec<AccountId32>();
-      accountVec.Create(new AccountId32[] { aliceAccount, bobAccount });
+      // ✅ FIXED: Use Account[] instead of List<Account>
+      var players = new Account[] { Alice, Bob };
 
-      // ✅ Use EnumCall for CreateGame extrinsic
-      var enumCall = new EnumCall();
-      enumCall.Create(Call.create_game, accountVec);
+      var accountInfo = await client.GetAccountAsync(aliceAccount, CancellationToken.None);
+      if (accountInfo == null)
+        return "Account info retrieval failed";
 
-      // ✅ Log the encoded EnumCall data in lowercase without hyphens
-      var encodedEnumCall = enumCall.Encode();
-      string encodedEnumCallHex = BitConverter.ToString(encodedEnumCall).Replace("-", "").ToLower();
-      Debug.Log($"[CreateGame] Encoded EnumCall: {encodedEnumCallHex}");
+      var subscriptionId = await CreateGameAsync(Alice, players, 1, CancellationToken.None);
 
-      try
-      {
-        Debug.Log($"[CreateGame] Fetching nonce for Alice...");
-
-        // ✅ Get Account Info using available client method
-        var accountInfo = await client.GetAccountAsync(aliceAccount, CancellationToken.None);
-        if (accountInfo == null)
-        {
-          Debug.LogError("[CreateGame] Failed to retrieve Alice's account info.");
-          return "Account info retrieval failed";
-        }
-
-        uint nonce = accountInfo.Nonce;
-        Debug.Log($"[CreateGame] Alice's Nonce: {nonce}");
-
-        // ✅ Create the extrinsic
-        Debug.Log($"[CreateGame] Creating extrinsic...");
-        var extrinsicMethod = EterraCalls.CreateGame(accountVec);
-
-        // ✅ Encode the extrinsic
-        var encodedExtrinsic = extrinsicMethod.Encode();
-        string encodedExtrinsicHex = BitConverter.ToString(encodedExtrinsic).Replace("-", "").ToLower();
-        Debug.Log($"[CreateGame] Encoded Extrinsic (before signing): {encodedExtrinsicHex}");
-
-        // ✅ Submit extrinsic using the correct API method
-        Debug.Log($"[CreateGame] Submitting transaction...");
-        var subscriptionId = await client.GenericExtrinsicAsync(Alice, "Eterra.CreateGame", extrinsicMethod, 1, CancellationToken.None);
-
-        if (subscriptionId == null)
-        {
-          Debug.LogWarning("[CreateGame] eterra.createGame submission failed.");
-          return "Submission failed";
-        }
-
-        Debug.Log($"[CreateGame] eterra.createGame transaction hash: {subscriptionId}");
-
-        // ✅ Final log before returning
-        Debug.Log($"[CreateGame] Transaction successfully sent: {subscriptionId}");
-
-        return subscriptionId.ToString();
-      }
-      catch (Exception ex)
-      {
-        Debug.LogError($"[CreateGame] Error during eterra.createGame: {ex.Message}");
-        return $"Error: {ex.Message}";
-      }
+      return string.IsNullOrEmpty(subscriptionId) ? "Submission failed" : subscriptionId;
     }
 
-
-    /// <summary>
-    /// Transfer keep alive
-    /// </summary>
-    /// <param name="account"></param>
-    /// <param name="dest"></param>
-    /// <param name="value"></param>
-    /// <param name="concurrentTasks"></param>
-    /// <param name="token"></param>
-    /// <returns></returns>
-    public async Task<string> CreateGameKeepAliveAsync(Account account, AccountId32 dest, BigInteger value, int concurrentTasks, CancellationToken token)
+    public async Task<string> CreateGameAsync(AccountId32[] players, int concurrentTasks, CancellationToken token)
     {
-      var extrinsicType = "Eterra.CreateGame";
+      var extrinsicType = "EterraCalls.CreateGame";
 
-      if (!client.IsConnected || account == null)
+      if (!client.IsConnected || client.Account == null)
       {
         return null;
       }
 
-      var multiAddress = new EnumMultiAddress();
-      multiAddress.Create(MultiAddress.Id, dest);
+      var extrinsic = EterraCalls.CreateGame(new BaseVec<AccountId32>(players.ToArray()));
 
-      // Convert dest to BaseVec<AccountId32> with an array
-      var accountVec = new BaseVec<AccountId32>();
-      accountVec.Create(new AccountId32[] { dest });
-
-      var extrinsic = EterraCalls.CreateGame(accountVec);
-
-      try
-      {
-        var subscriptionId = await client.GenericExtrinsicAsync(account, extrinsicType, extrinsic, concurrentTasks, token);
-        if (subscriptionId == null)
-        {
-          Debug.LogWarning("[BalanceTransfer] Eterra.CreateGame subscription failed.");
-          return null;
-        }
-        Debug.Log($"[BalanceTransfer] Eterra.CreateGame subscriptionId: {subscriptionId}");
-
-        return subscriptionId;
-      }
-      catch (Exception ex)
-      {
-        Debug.LogError($"[BalanceTransfer] Error during Eterra.CreateGame: {ex.Message}");
-        return null;
-      }
+      return await client.GenericExtrinsicAsync(client.Account, extrinsicType, extrinsic, concurrentTasks, token);
     }
-
 
     #endregion
   }
