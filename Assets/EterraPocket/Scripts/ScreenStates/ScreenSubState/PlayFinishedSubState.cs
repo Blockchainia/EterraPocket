@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 
 namespace Assets.Scripts.ScreenStates
 {
-  internal class PlayFinishSubState : GameBaseState
+  internal class PlayFinishedSubState : GameBaseState
   {
     private readonly System.Random _random = new System.Random();
 
@@ -14,7 +14,7 @@ namespace Assets.Scripts.ScreenStates
 
     private Button _btnReset;
 
-    public PlayFinishSubState(GameController flowController, GameBaseState parent)
+    public PlayFinishedSubState(GameController flowController, GameBaseState parent)
         : base(flowController, parent) { }
 
     public override void EnterState()

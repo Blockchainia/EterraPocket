@@ -5941,7 +5941,7 @@
             Contains a variant per dispatchable extrinsic that this pallet has.
             </summary>
         </member>
-        <member name="M:Eterra.NetApiExt.Generated.Storage.SystemCalls.SetStorage(Substrate.NetApi.Model.Types.Base.BaseVec{Substrate.NetApi.Model.Types.Base.BaseTuple{Substrate.NetApi.Model.Types.Base.BaseVec{Substrate.NetApi.Model.Types.Primitive.U8},Substrate.NetApi.Model.Types.Base.BaseVec{Substrate.NetApi.Model.Types.Primitive.U8}}})">
+        <member name="M:Eterra.NetApiExt.Generated.Storage.SystemCalls.SetStorage(Substrate.NetApi.Model.Types.Base.BaseVec{SBaseTupleubstrate.NetApi.Model.Types.Base.{Substrate.NetApi.Model.Types.Base.BaseVec{Substrate.NetApi.Model.Types.Primitive.U8},Substrate.NetApi.Model.Types.Base.BaseVec{Substrate.NetApi.Model.Types.Primitive.U8}}})">
             <summary>
             >> set_storage
             Contains a variant per dispatchable extrinsic that this pallet has.

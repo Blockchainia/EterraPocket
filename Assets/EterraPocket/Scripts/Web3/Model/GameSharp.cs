@@ -39,17 +39,5 @@ namespace Eterra.Integration.Model
     public Board Board { get; private set; }
     public (byte Player1Score, byte Player2Score) Scores { get; private set; }
     public (Color Player1Color, Color Player2Color) PlayerColors { get; private set; }
-
-    /// <summary>
-    /// Initializes the game state.
-    /// </summary>
-    public void Init()
-    {
-      PlayerTurn = 0;
-      Round = 0;
-      Scores = (0, 0);
-      State = GameState.Matchmaking;
-      Board = new Board(new Arr4Arr4BaseOpt());
-    }
   }
 }

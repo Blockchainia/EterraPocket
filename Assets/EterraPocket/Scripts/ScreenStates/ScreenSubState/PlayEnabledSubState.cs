@@ -4,7 +4,7 @@ using System.Collections;
 
 namespace Assets.Scripts.ScreenStates
 {
-  internal class PlayInitSubState : GameBaseState
+  internal class PlayEnabledSubState : GameBaseState
   {
     private Label _statusLabel;
     private Button _statusActionButton;
@@ -18,7 +18,7 @@ namespace Assets.Scripts.ScreenStates
     private Label _lblOpponentReady;
     private Coroutine _timerCoroutine;
 
-    public PlayInitSubState(GameController flowController, GameBaseState parent)
+    public PlayEnabledSubState(GameController flowController, GameBaseState parent)
         : base(flowController, parent)
     {
 

@@ -14,9 +14,7 @@ namespace Assets.Scripts.ScreenStates
 
     private Button _btnPlay;
 
-    private Button _btnReset;
-
-    private Button _btnTest;
+    private Button _btnHistory;
 
     private Button _btnTrain;
     public MainChooseSubState(GameController flowController, GameBaseState parent)
@@ -40,21 +38,12 @@ namespace Assets.Scripts.ScreenStates
       _btnPlay.SetEnabled(false);
       _btnPlay.RegisterCallback<ClickEvent>(OnBtnPlayClicked);
 
-      _btnTrain = elementInstance.Q<Button>("BtnTrain");
+      _btnTrain = elementInstance.Q<Button>("BtnHistory");
       _btnTrain.SetEnabled(true);
-      _btnTrain.RegisterCallback<ClickEvent>(OnBtnTrainClicked);
-
-      _btnTest = elementInstance.Q<Button>("BtnTest");
-      _btnTest.SetEnabled(true);
-      _btnTest.RegisterCallback<ClickEvent>(OnBtnTestClicked);
+      _btnTrain.RegisterCallback<ClickEvent>(OnBtnHistoryClicked);
 
       var btnExit = elementInstance.Q<Button>("BtnExit");
       btnExit.RegisterCallback<ClickEvent>(OnBtnExitClicked);
-
-      _btnReset = elementInstance.Q<Button>("BtnReset");
-      _btnReset.SetEnabled(false);
-      _btnReset.RegisterCallback<ClickEvent>(OnBtnResetClicked);
-
 
       // add element
       scrollView.Add(elementInstance);
@@ -73,23 +62,10 @@ namespace Assets.Scripts.ScreenStates
 
     }
 
-    private void OnBtnTrainClicked(ClickEvent evt)
+    private void OnBtnHistoryClicked(ClickEvent evt)
     {
-      Debug.Log($"[{this.GetType().Name}][SUB] OnBtnTrainClicked");
-      FlowController.ChangeScreenState(GameScreen.PlayScreen);
-
-    }
-
-    private void OnBtnTestClicked(ClickEvent evt)
-    {
-      Debug.Log($"[{this.GetType().Name}][SUB] OnBtnTestClicked");
-      FlowController.ChangeScreenSubState(GameScreen.MainScreen, GameSubScreen.MainTest);
-
-    }
-
-    private async void OnBtnResetClicked(ClickEvent evt)
-    {
-      Debug.Log($"[{this.GetType().Name}][SUB] OnBtnResetClicked");
+      Debug.Log($"[{this.GetType().Name}][SUB] OnBtnHistoryClicked");
+      FlowController.ChangeScreenState(GameScreen.HistoryScreen);
 
     }
 

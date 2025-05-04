@@ -18,6 +18,20 @@ namespace Eterra.Integration.Model
       Cells = ConvertToCellArray(board);
     }
 
+    /// <summary>
+    /// Initializes the board to a default empty state.
+    /// </summary>
+    public void Init()
+    {
+      for (int i = 0; i < 4; i++)
+      {
+        for (int j = 0; j < 4; j++)
+        {
+          Cells[i, j] = new Cell(i, j, new CardWrapper(new BaseOpt<Card>(null)));
+        }
+      }
+    }
+
     private Cell[,] ConvertToCellArray(Arr4Arr4BaseOpt board)
     {
       var cellArray = new Cell[4, 4];

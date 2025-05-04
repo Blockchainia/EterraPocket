@@ -11,19 +11,18 @@ namespace Assets.Scripts
     StartScreen,
     MainScreen,
     PlayScreen,
+    HistoryScreen
   }
 
   public enum GameSubScreen
   {
     MainChoose,
-    MainTest,
     Play,
     PlayInit,
-    PlayPlayerTurn,
-    PlayOpponentTurn,
-    PlaySelect,
-    PlayFinish,
-    PlayWaiting,
+    PlaySpinning,
+    PlayEnabled,
+    PlayFinished,
+    HistoryInit,
   }
 
   public class GameController : ScreenStateMachine<GameScreen, GameSubScreen>
@@ -84,8 +83,9 @@ namespace Assets.Scripts
       var mainScreenSubStates = new Dictionary<GameSubScreen, IScreenState>
             {
                 { GameSubScreen.MainChoose, new MainChooseSubState(this, mainScreen) },
-                { GameSubScreen.MainTest, new MainTestSubState(this, mainScreen) },
                 { GameSubScreen.Play, new MainPlaySubState(this, mainScreen) },
+                { GameSubScreen.HistoryInit, new MainPlaySubState(this, mainScreen) },
+
             };
       _subStateDictionary.Add(GameScreen.MainScreen, mainScreenSubStates);
 
@@ -95,13 +95,20 @@ namespace Assets.Scripts
       var playScreenSubStates = new Dictionary<GameSubScreen, IScreenState>
             {
                 { GameSubScreen.PlayInit, new PlayInitSubState(this, playScreen) },
-                { GameSubScreen.PlaySelect, new PlaySelectSubState(this, playScreen) },
-                { GameSubScreen.PlayPlayerTurn, new PlayPlayerTurnSubState(this, playScreen) },
-                { GameSubScreen.PlayOpponentTurn, new PlayOpponentTurnSubState(this, playScreen) },
-                { GameSubScreen.PlayFinish, new PlayFinishSubState(this, playScreen) },
-                { GameSubScreen.PlayWaiting, new PlayWaitingSubState(this, playScreen) },
+                { GameSubScreen.PlaySpinning, new PlaySpinningSubState(this, playScreen) },
+                { GameSubScreen.PlayEnabled, new PlayEnabledSubState(this, playScreen) },
+                { GameSubScreen.PlayFinished, new PlayFinishedSubState(this, playScreen) },
             };
       _subStateDictionary.Add(GameScreen.PlayScreen, playScreenSubStates);
+
+      var historyScreen = new HistoryScreenState(this);
+      _stateDictionary.Add(GameScreen.HistoryScreen, historyScreen);
+
+      var historyScreenSubStates = new Dictionary<GameSubScreen, IScreenState>
+            {
+                { GameSubScreen.HistoryInit, new HistoryInitSubState(this, historyScreen) },
+            };
+      _subStateDictionary.Add(GameScreen.HistoryScreen, historyScreenSubStates);
     }
 
     /// <summary>

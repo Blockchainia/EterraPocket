@@ -28,7 +28,7 @@ namespace Assets.Scripts.ScreenStates
       Debug.Log($"[{this.GetType().Name}] EnterState");
 
       // Filler to avoid camera in the UI
-      var topFiller = FlowController.VelContainer.Q<VisualElement>("VelTopFiller");
+      // var topFiller = FlowController.VelContainer.Q<VisualElement>("VelTopFiller");
 
       if (_playScreenUI != null)
       {
